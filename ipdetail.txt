@@ -1,0 +1,3 @@
+aws ec2 describe-instances --query 'Reservations[].Instances[].PrivateIpAddress' > for private
+
+aws ec2 describe-network-interfaces --query NetworkInterfaces[].Association.PublicIp > for public ip
