@@ -1,10 +1,15 @@
 #!/bin/sh
+sub='subnet-49437821'
+sec='sg-0967b41d4e2343e31'
+ami='ami-0a4a70bd98c6d6441'
+keyp='MyKeyPair'
 echo  intstance Name:
 read tag
 echo  instance count:
 read no
-out=$(aws ec2 run-instances --image-id ami-0620d12a9cf777c87 --instance-type t2.micro --count $no --security-group-ids sg-0622e82b35f4a191c --key-name ankitlinux1 --user-data file://basic.sh  --output text)
-id=$(echo $out | cut -d " " -f 9)
+id=$(aws ec2 run-instances --image-id $ami --instance-type t2.micro --count 1 --security-group-ids $sec --key-name $keyp   --output table | grep InstanceId | cut -d "|" -f4)
 aws ec2 create-tags --resources $id --tags "Key=Name,Value=$tag"
-echo your Instance Name is "$tag" And instanceId is "$id"
-#aws ec2 run-instances --image-id ami-0620d12a9cf777c87 --count 1 --instance-type t2.micro --key-name ankitlinux1 --security-group-ids sg-0622e82b35f4a191c --user-data file://basic.sh
+ip=$(aws ec2 describe-instances --instance-ids i-06ea152ed5b4513c3 --output json | grep -e PublicIpAddress -e InstanceId)
+echo your Instance detail"
+$tag,$ip"
+
